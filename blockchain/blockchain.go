@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	dbFile       = "../blockchain.db"
+	dbFile       = "blockchain.db"
 	blocksBucket = "blocks"
 )
 
@@ -92,4 +92,10 @@ func (bc *Blockchain) AddBlock(data string) {
 
 func (bc *Blockchain) Iterator() *BlockchainIterator {
 	return &BlockchainIterator{bc.tip, bc.db}
+}
+
+func (bc *Blockchain) CloseDBConn() {
+	if bc.db != nil {
+		bc.db.Close()
+	}
 }
