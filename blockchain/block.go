@@ -26,6 +26,10 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 	return block
 }
 
+func NewGenesisBlock() *Block {
+	return NewBlock("Genesis Block", []byte{})
+}
+
 func (b *Block) Serialize() []byte {
 	var result bytes.Buffer
 	encoder := gob.NewEncoder(&result)

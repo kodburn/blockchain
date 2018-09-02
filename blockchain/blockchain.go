@@ -16,10 +16,6 @@ type Blockchain struct {
 	db  *bolt.DB
 }
 
-func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
-}
-
 func NewBlockchain() *Blockchain {
 	var tip []byte
 	db, err := bolt.Open(dbFile, 0600, nil)
