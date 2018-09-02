@@ -12,11 +12,14 @@ const (
 	blocksBucket = "blocks"
 )
 
+// Blockchain is a backwards linked chain of blocks.
 type Blockchain struct {
 	tip []byte
 	db  *bolt.DB
 }
 
+// NewBlockchain retrieves and returns blockchain if any.
+// Otherwise, stores and returns new blockchain instance.
 func NewBlockchain() *Blockchain {
 	var tip []byte
 	db, err := bolt.Open(dbFile, 0600, nil)
@@ -55,6 +58,7 @@ func NewBlockchain() *Blockchain {
 	return &Blockchain{tip, db}
 }
 
+// AddBlock mines new block and ads it to the blockchain.
 func (bc *Blockchain) AddBlock(data string) {
 	var lastHash []byte
 
@@ -89,10 +93,12 @@ func (bc *Blockchain) AddBlock(data string) {
 	})
 }
 
+// Iterator returns BlockchainIterator instance for the current Blockchain.
 func (bc *Blockchain) Iterator() *BlockchainIterator {
 	return &BlockchainIterator{bc.tip, bc.db}
 }
 
+// CloseDBConn closes bolt database connection.
 func (bc *Blockchain) CloseDBConn() {
 	if bc.db != nil {
 		bc.db.Close()

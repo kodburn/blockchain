@@ -6,10 +6,13 @@ import (
 	"os"
 )
 
+// CLI is an entry point of the app.
+// It's responsible for processing command line arguments.
 type CLI struct {
 	bc *Blockchain
 }
 
+// NewCLI returns new CLI instance.
 func NewCLI(bc *Blockchain) *CLI {
 	return &CLI{bc}
 }
@@ -27,6 +30,7 @@ func (cli *CLI) validateArgs() {
 	}
 }
 
+// Run parses command line arguments and processes commands.
 func (cli *CLI) Run() {
 	cli.validateArgs()
 

@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Block keeps block headers.
 type Block struct {
 	Timestamp     int64
 	Data          []byte
@@ -15,6 +16,7 @@ type Block struct {
 	Nonce         int
 }
 
+// NewBlock mines new block.
 func NewBlock(data string, prevBlockHash []byte) *Block {
 	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
 	pow := NewProofOfWork(block)
@@ -26,10 +28,12 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 	return block
 }
 
+// NewGenesisBlock mines Genesis block.
 func NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", []byte{})
 }
 
+// Serialize serializes a block.
 func (b *Block) Serialize() []byte {
 	var result bytes.Buffer
 	encoder := gob.NewEncoder(&result)
@@ -42,6 +46,7 @@ func (b *Block) Serialize() []byte {
 	return result.Bytes()
 }
 
+// DeserializeBlock deserializes a block.
 func DeserializeBlock(d []byte) *Block {
 	var block Block
 

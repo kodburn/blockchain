@@ -6,11 +6,13 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+// BlockchainIterator iterates over blocks in the blockchain.
 type BlockchainIterator struct {
 	currentHash []byte
 	db          *bolt.DB
 }
 
+// Next returns next block starting from the tip.
 func (i *BlockchainIterator) Next() (block *Block, last bool) {
 	block = &Block{}
 	last = false

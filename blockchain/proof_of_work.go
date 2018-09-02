@@ -14,11 +14,13 @@ var (
 
 const targetBits = 20
 
+// ProofOfWork does the mining and validates the work.
 type ProofOfWork struct {
 	block  *Block
 	target *big.Int
 }
 
+// NewProofOfWork returns new NewProofOfWork instance.
 func NewProofOfWork(b *Block) *ProofOfWork {
 	target := big.NewInt(1)
 	target.Lsh(target, uint(256-targetBits))
@@ -41,17 +43,18 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 	return data
 }
 
-func (pow *ProofOfWork) Run() (int, []byte) {
+// Run performs proof-of-work on the block.
+func (pow *ProofOfWork) Run() (nonce int, hash []byte) {
 	var hashInt big.Int
-	var hash [32]byte
-	nonce := 0
+	var hashArr [32]byte
+	nonce = 0
 
 	fmt.Printf("Mining the block containing \"%s\"\n", pow.block.Data)
 	for nonce < maxNonce {
 		data := pow.prepareData(nonce)
-		hash = sha256.Sum256(data)
-		fmt.Printf("\r%x", hash)
-		hashInt.SetBytes(hash[:])
+		hashArr = sha256.Sum256(data)
+		fmt.Printf("\r%x", hashArr)
+		hashInt.SetBytes(hashArr[:])
 
 		if hashInt.Cmp(pow.target) == -1 {
 			break
@@ -61,9 +64,11 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	}
 	fmt.Print("\n\n")
 
-	return nonce, hash[:]
+	hash = hashArr[:]
+	return nonce, hash
 }
 
+// Validate validates block's PoW
 func (pow *ProofOfWork) Validate() bool {
 	var hashInt big.Int
 
