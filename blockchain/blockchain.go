@@ -1,6 +1,7 @@
 package blockchain
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/boltdb/bolt"
@@ -26,6 +27,7 @@ func NewBlockchain() *Blockchain {
 		b := tx.Bucket([]byte(blocksBucket))
 
 		if b == nil {
+			fmt.Println("No existing blockchain found. Creating a new one...")
 			genesis := NewGenesisBlock()
 
 			b, err := tx.CreateBucket([]byte(blocksBucket))
@@ -42,6 +44,7 @@ func NewBlockchain() *Blockchain {
 			if err != nil {
 				log.Panic(err)
 			}
+			tip = genesis.Hash
 		} else {
 			tip = b.Get([]byte("l"))
 		}

@@ -64,19 +64,20 @@ func (cli *CLI) addBlock(data string) {
 }
 
 func (cli *CLI) printChain() {
-	bi := cli.bc.Iterator()
+	bci := cli.bc.Iterator()
 
 	for {
-		block, last := bi.Next()
+		block, last := bci.Next()
+
+		fmt.Printf("Prev hash: %x\n", block.PrevBlockHash)
+		fmt.Printf("Data: %s\n", block.Data)
+		fmt.Printf("Hash: %x\n", block.Hash)
+		pow := NewProofOfWork(block)
+		fmt.Printf("PoW: %t\n", pow.Validate())
+		fmt.Println()
+
 		if last {
 			break
-		} else {
-			fmt.Printf("Prev hash: %x\n", block.PrevBlockHash)
-			fmt.Printf("Data: %s\n", block.Data)
-			fmt.Printf("Hash: %x\n", block.Hash)
-			pow := NewProofOfWork(block)
-			fmt.Printf("PoW: %t\n", pow.Validate())
-			fmt.Println()
 		}
 	}
 }

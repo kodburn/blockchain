@@ -18,10 +18,9 @@ func (i *BlockchainIterator) Next() (block *Block, last bool) {
 	err := i.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		encodedBlock := b.Get(i.currentHash)
-		if encodedBlock == nil {
+		block = DeserializeBlock(encodedBlock)
+		if block.PrevBlockHash == nil {
 			last = true
-		} else {
-			block = DeserializeBlock(encodedBlock)
 		}
 
 		return nil
